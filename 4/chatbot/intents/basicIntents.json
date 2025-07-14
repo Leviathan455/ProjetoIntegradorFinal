@@ -4,59 +4,66 @@
       "tag": "inicio",
       "patterns": ["início", "começar", "quero ajuda", "menu", "ajuda", "0"],
       "responses": [
-        "Olá! 👋 Bem-vindo à Compact.\n\nPosso te ajudar com:\n\n1️⃣ *Fazer um Orçamento/Abrir Chamado*\n2️⃣ *Saber mais sobre a Compact*\n3️⃣ *Falar com um atendente*\n\nÉ só me dizer o que deseja. 😊"
+        "Olá! Bem-vindo(a) à Compact. Nossa missão é simplificar e evoluir o seu negócio através da tecnologia. \n\nComo posso te ajudar hoje?\n\n1️⃣ *Estruturar um Projeto/Orçamento*\n2️⃣ *Saber mais sobre a Compact*\n3️⃣ *Falar com um especialista*"
       ]
     },
     {
       "tag": "saudacao",
       "patterns": ["olá", "oi", "bom dia", "boa tarde", "boa noite"],
       "responses": [
-        "Olá! Seja bem-vindo à Compact! 😊\nComo posso te ajudar?\n\n1️⃣ Fazer Orçamento/Abrir Chamado\n2️⃣ Saber mais sobre a Compact\n3️⃣ Falar com atendente"
+        "Olá! Sou o assistente virtual da Compact. Estamos prontos para aliar tecnologia e inteligência ao seu negócio. 😊\n\nO que você precisa?\n\n1️⃣ *Estruturar um Projeto/Orçamento*\n2️⃣ *Saber mais sobre a Compact*\n3️⃣ *Falar com um especialista*"
       ]
     },
     {
       "tag": "despedida",
       "patterns": ["tchau", "adeus", "até logo", "até mais", "finalizar", "encerrar"],
-      "responses": ["Até logo! 👋", "Foi um prazer ajudar! Volte sempre. 😊", "Nos vemos em breve!"]
+      "responses": ["Até logo! Se precisar otimizar algum processo, sabe onde nos encontrar. 👋", "Foi um prazer. Estamos à disposição para ajudar seu negócio a evoluir!", "Até a próxima!"]
     },
     {
       "tag": "agradecimento",
       "patterns": ["obrigado", "valeu", "agradeço", "muito obrigado"],
-      "responses": ["De nada! 😊", "Sempre à disposição!", "Fico feliz em ajudar!"]
+      "responses": ["De nada! É um prazer ajudar a estruturar suas ideias.", "Disponha! Se tiver mais alguma dúvida, estou aqui.", "Fico feliz em ajudar!"]
     },
     {
       "tag": "empresa",
       "patterns": ["quem são vocês", "sobre a empresa", "o que fazem", "o que é a Compact", "empresa", "2"],
       "responses": [
-        "A Compact é uma empresa especializada na criação de sites modernos, eficientes e personalizados. 💻✨\n\nNosso objetivo é ajudar negócios a se destacarem online com soluções digitais sob medida, design profissional e foco em resultados.\n\nEstamos aqui para transformar ideias em experiências digitais incríveis! 🚀"
+        "Nossa missão na Compact é simplificar a operação de nossos clientes, aliando tecnologia e inteligência. 💡\n\nAcreditamos que uma TI bem estruturada e com suporte especializado é o caminho para a evolução de qualquer negócio. Desenvolvemos sistemas e soluções sob medida que não apenas resolvem problemas, mas impulsionam o seu sucesso. 🚀\n\nComo podemos ajudar a estruturar o seu projeto hoje?"
       ]
     },
     {
       "tag": "atendente",
       "patterns": ["quero falar com atendente", "humano", "suporte", "falar com alguém", "3"],
       "responses": [
-        "Certo! 📞 Um de nossos atendentes entrará em contato com você por telefone em breve. Fique atento ao seu número cadastrado. 😉"
+        "Entendido. Para uma análise mais detalhada e personalizada do seu projeto, vou direcionar você para um de nossos especialistas. Por favor, aguarde que em breve nossa equipe comercial entrará em contato. 📞"
       ]
     },
     {
       "tag": "iniciar_chamado_orcamento",
       "patterns": ["fazer um orçamento", "abrir chamado", "chamado", "orcamento", "1"],
       "responses": [
-        "Ótimo! Para começarmos seu orçamento/chamado, por favor, descreva a sua ideia com o máximo de detalhes possível."
+        "Excelente! O primeiro passo para a evolução é a organização. Para começarmos a estruturar seu projeto, por favor, descreva sua ideia ou necessidade da forma mais completa possível."
       ]
     },
     {
       "tag": "chamado_finalizado",
       "patterns": ["confirmar chamado", "salvar chamado"],
       "responses": [
-        "Seu chamado foi registrado com sucesso! Nossa equipe entrará em contato em breve para dar prosseguimento. Agradecemos o seu contato."
+        "Perfeito! Seu chamado foi protocolado com sucesso. ✅ Este é o primeiro passo para a evolução do seu projeto. Nossa equipe de especialistas analisará as informações e entrará em contato em breve. Agradecemos a confiança!"
       ]
     },
     {
       "tag": "cancelar_chamado",
       "patterns": ["cancelar chamado", "não quero mais", "desistir", "cancelar"],
       "responses": [
-        "Certo, o processo de criação de chamado foi cancelado. Posso ajudar com mais alguma coisa?\n\n1️⃣ Fazer Orçamento/Abrir Chamado\n2️⃣ Saber mais sobre a Compact\n3️⃣ Falar com atendente"
+        "Processo cancelado. Sem problemas! Se mudar de ideia ou tiver uma nova necessidade, estaremos aqui para ajudar a estruturar.\n\nPosso te ajudar com mais alguma coisa?\n\n1️⃣ Estruturar um Projeto/Orçamento\n2️⃣ Saber mais sobre a Compact\n3️⃣ Falar com um especialista"
+      ]
+    },
+    {
+      "tag": "iniciar_cadastro",
+      "patterns": ["cadastro", "cadastrar", "criar conta"],
+      "responses": [
+        "Que ótimo! Vamos criar sua conta. Por favor, me diga seu nome completo."
       ]
     }
   ]

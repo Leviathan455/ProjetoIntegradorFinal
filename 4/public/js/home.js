@@ -1,171 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- ELEMENTOS DO DOM ---
-    const usernameEl = document.getElementById('username');
+    // === ELEMENTOS DO DOM ===
+    const welcomeHeader = document.getElementById('welcome-header');
+    const usernameSpan = document.getElementById('username');
     const adminConfigBtn = document.getElementById('adminConfigBtn');
+    const historySection = document.getElementById('history-section');
+    const guestPrompt = document.getElementById('guest-prompt');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
     const chatMessages = document.getElementById('chatMessages');
     const userInput = document.getElementById('userInput');
     const sendButton = document.getElementById('sendButton');
     const chatHistoryList = document.getElementById('chat-history-list');
     const newChatButton = document.getElementById('new-chat-button');
-    const logoutBtn = document.getElementById('logoutBtn');
     const menuToggle = document.querySelector('.menu-toggle');
     const sidebar = document.querySelector('.sidebar');
 
-    // --- ESTADO DA APLICAÇÃO ---
+    // === ESTADO DA APLICAÇÃO ===
     const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
     let conversationId = null;
-    let activeConversationElement = null;
+    let currentFlowState = null; // Guarda o estado do fluxo de cadastro
 
-    // --- FUNÇÕES DE INICIALIZAÇÃO E AUTENTICAÇÃO ---
+    // === INICIALIZAÇÃO ===
+    initialize();
+
     function initialize() {
-        const username = localStorage.getItem('username');
-        if (!username || !token) {
-            logout();
-            return;
+        if (token && username) {
+            setupAuthenticatedUser();
+        } else {
+            setupGuestUser();
         }
-        
-        usernameEl.textContent = username;
-        setupAdminView(token);
         setupEventListeners();
+        startNewConversation(true); // Inicia uma conversa para todos
+    }
+
+    // --- LÓGICAS DE CONFIGURAÇÃO DE UI ---
+    function setupAuthenticatedUser() {
+        usernameSpan.textContent = username;
+        historySection.style.display = 'flex';
+        logoutBtn.style.display = 'block';
+        guestPrompt.style.display = 'none';
+
+        const decoded = parseJwt(token);
+        if (decoded && (decoded.role === 'admin' || decoded.isAdmin)) {
+            adminConfigBtn.style.display = 'block';
+        }
+
         loadChatHistory();
     }
-    
-    function logout() {
-        localStorage.clear();
-        window.location.href = 'index.html';
-    }
-    
-    function parseJwt(token) {
-        try {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-            return JSON.parse(jsonPayload);
-        } catch (err) {
-            console.error('Erro ao decodificar token:', err);
-            return null;
-        }
+
+    function setupGuestUser() {
+        usernameSpan.textContent = 'Convidado';
+        guestPrompt.style.display = 'block';
+        historySection.style.display = 'none';
+        logoutBtn.style.display = 'none';
+        adminConfigBtn.style.display = 'none';
     }
 
-    function setupAdminView(token) {
-        const decoded = parseJwt(token);
-        const isAdmin = decoded && (decoded.role === 'admin' || decoded.permissao === 'admin' || decoded.isAdmin === true);
-        if (!isAdmin && adminConfigBtn) {
-            adminConfigBtn.style.display = 'none';
-        }
-    }
-
-    // --- FUNÇÕES AUXILIARES E DE UI ---
-    function addMessage(sender, text) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', `${sender}-message`);
-        // Para renderizar quebras de linha corretamente
-        messageDiv.innerText = text; 
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function formatDateTime(dateString) {
-        if (!dateString) return 'Data desconhecida';
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) {
-            return 'Data Inválida';
-        }
-        return date.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    }
-
-    function createConversationListItem(conv) {
-        const listItem = document.createElement('li');
-        listItem.textContent = conv.last_message_time ? `Conversa em ${formatDateTime(conv.last_message_time)}` : `Conversa ${conv.id}`;
-        listItem.dataset.conversationId = conv.id;
-        listItem.tabIndex = 0; // Para acessibilidade
-        listItem.addEventListener('click', () => loadConversation(conv.id, listItem));
-        listItem.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loadConversation(conv.id, listItem);
-        });
-        return listItem;
-    }
-
-    // --- LÓGICA PRINCIPAL DO CHAT ---
-    async function fetchApi(url, options = {}) {
-        const defaultOptions = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-        const response = await fetch(url, { ...defaultOptions, ...options, headers: { ...defaultOptions.headers, ...options.headers } });
-
-        if (response.status === 401) {
-            console.error('Sessão expirada ou não autorizado.');
-            logout();
-            throw new Error('Não autorizado');
-        }
-        if (!response.ok) {
-            throw new Error(`Erro na API: ${response.statusText || response.status}`);
-        }
-        return response.json();
-    }
-    
-    async function loadChatHistory() {
-        try {
-            const conversations = await fetchApi('/api/chatbot/conversations');
-            chatHistoryList.innerHTML = '';
-
-            if (conversations.length === 0) {
-                chatHistoryList.innerHTML = '<li>Nenhuma conversa.</li>';
-                startNewConversation(true);
-                return;
-            }
-
-            conversations.sort((a, b) => new Date(b.last_message_time || 0) - new Date(a.last_message_time || 0));
-            
-            conversations.forEach(conv => {
-                const listItem = createConversationListItem(conv);
-                chatHistoryList.appendChild(listItem);
-            });
-
-            if (conversations.length > 0 && !conversationId) {
-                chatHistoryList.querySelector(`[data-conversation-id="${conversations[0].id}"]`)?.click();
-            }
-        } catch (error) {
-            console.error('Erro ao carregar histórico de conversas:', error);
-            chatHistoryList.innerHTML = '<li>Erro ao carregar.</li>';
-        }
-    }
-
-    async function loadConversation(convId, listItemElement) {
-        chatMessages.innerHTML = '<div class="message bot-message">Carregando mensagens...</div>';
-        
-        try {
-            const messages = await fetchApi(`/api/chatbot/history/${convId}`);
-            chatMessages.innerHTML = '';
-            messages.forEach(msg => addMessage(msg.sender_type, msg.message_text));
-            conversationId = convId;
-
-            if (activeConversationElement) {
-                activeConversationElement.classList.remove('active-conversation');
-            }
-            listItemElement.classList.add('active-conversation');
-            activeConversationElement = listItemElement;
-        } catch (error) {
-            console.error('Erro ao carregar conversa:', error);
-            addMessage('bot', 'Desculpe, não foi possível carregar esta conversa.');
-        }
-    }
-    
-    function startNewConversation(initial = false) {
+    // --- LÓGICA DO CHAT ---
+    function startNewConversation(isInitial = false) {
         conversationId = null;
+        currentFlowState = null; // Reseta o fluxo ao iniciar nova conversa
         chatMessages.innerHTML = '';
-        if (activeConversationElement) {
-            activeConversationElement.classList.remove('active-conversation');
-            activeConversationElement = null;
-        }
-        addMessage('bot', 'Olá! Seja bem-vindo à Compact! 😊\n\nComo posso te ajudar?\n\n1️⃣ Fazer Orçamento/Abrir Chamado\n2️⃣ Saber mais sobre a Compact\n3️⃣ Falar com atendente');
+        addMessage('bot', 'Olá! Para se cadastrar, digite "cadastro". Como posso te ajudar hoje?');
         userInput.focus();
 
-        if (!initial) {
-           loadChatHistory();
+        if (token && !isInitial) {
+            loadChatHistory();
         }
     }
 
@@ -177,40 +78,113 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.value = '';
 
         try {
+            // Envia o estado do fluxo para o backend
             const data = await fetchApi('/api/chatbot/messages', {
                 method: 'POST',
-                body: JSON.stringify({ conversationId, message })
+                body: JSON.stringify({
+                    conversationId,
+                    message,
+                    flowState: currentFlowState
+                })
             });
             
             addMessage('bot', data.response);
 
-            if (!conversationId && data.conversationId) { // Se era uma nova conversa
-                await loadChatHistory(); // Recarrega o histórico para mostrar a nova conversa
+            // Recebe e armazena o novo estado do fluxo
+            currentFlowState = data.flowState;
+
+            // Se o usuário logado iniciar uma nova conversa, atualiza o histórico
+            if (!conversationId && data.conversationId && token) {
+                conversationId = data.conversationId;
+                await loadChatHistory();
             }
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
-            addMessage('bot', 'Desculpe, ocorreu um erro. Tente novamente.');
+            addMessage('bot', 'Desculpe, ocorreu um erro. Por favor, tente novamente.');
         }
     }
 
-    // --- EVENT LISTENERS ---
-    function setupEventListeners() {
-        logoutBtn.addEventListener('click', logout);
-        newChatButton.addEventListener('click', () => startNewConversation(false));
-        sendButton.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+    // --- FUNÇÕES DE DADOS (API E HISTÓRICO) ---
+    async function fetchApi(url, options = {}) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        const response = await fetch(url, { ...options, headers });
 
-        // Lógica para o menu mobile
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
+        if (!response.ok) {
+            if (response.status === 401) { logout(); }
+            throw new Error(`Erro na API: ${response.statusText}`);
+        }
+        return response.json();
     }
 
-    // --- INICIA A APLICAÇÃO ---
-    initialize();
+    async function loadChatHistory() {
+        if (!token) return;
+        try {
+            const conversations = await fetchApi('/api/chatbot/conversations');
+            chatHistoryList.innerHTML = '';
+            (conversations || []).forEach(conv => {
+                const listItem = document.createElement('li');
+                // Usa diretamente o 'title' formatado que o backend envia
+                listItem.textContent = conv.title || `Conversa #${conv.id}`;
+                listItem.dataset.conversationId = conv.id;
+                listItem.addEventListener('click', () => loadConversation(conv.id, listItem));
+                chatHistoryList.appendChild(listItem);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar histórico:', error);
+        }
+    }
+
+    async function loadConversation(convId, listItem) {
+        chatMessages.innerHTML = '<div class="message bot-message">Carregando...</div>';
+        try {
+            const messages = await fetchApi(`/api/chatbot/history/${convId}`);
+            chatMessages.innerHTML = '';
+            (messages || []).forEach(msg => addMessage(msg.sender_type, msg.message_text));
+            conversationId = convId;
+
+            // Lógica para destacar a conversa ativa na lista
+            document.querySelectorAll('#chat-history-list li').forEach(li => li.classList.remove('active-conversation'));
+            if(listItem) listItem.classList.add('active-conversation');
+
+        } catch (error) {
+            console.error('Erro ao carregar conversa:', error);
+            addMessage('bot', 'Não foi possível carregar esta conversa.');
+        }
+    }
+
+    // --- EVENT LISTENERS E FUNÇÕES UTILITÁRIAS ---
+    function setupEventListeners() {
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+        });
+        
+        if(logoutBtn) logoutBtn.addEventListener('click', logout);
+        if(newChatButton) newChatButton.addEventListener('click', () => startNewConversation(false));
+        if(menuToggle) menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    }
+    
+    function logout() {
+        localStorage.clear();
+        window.location.href = 'index.html';
+    }
+
+    function addMessage(sender, text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.innerText = text;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function parseJwt(token) {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return null;
+        }
+    }
 });

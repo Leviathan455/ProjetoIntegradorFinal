@@ -23,31 +23,36 @@
       <nav>
         <ul>
           <li><a href="#" class="active"><i class="fas fa-comment"></i> Chat</a></li>
-          <li id="adminConfigBtn"><a href="admin.html"><i class="fas fa-cog"></i> Configurações ADM</a></li>
+          <li id="adminConfigBtn" style="display: none;"><a href="admin.html"><i class="fas fa-cog"></i> Painel ADM</a></li>
         </ul>
       </nav>
 
-      <div class="history-section">
+      <div class="user-actions">
+        <div id="history-section" class="history-section" style="display: none;">
           <h3>Histórico</h3>
-          <ul id="chat-history-list">
-              </ul>
+          <ul id="chat-history-list"></ul>
           <button id="new-chat-button" class="new-chat-btn">Nova Conversa</button>
+        </div>
+
+        <div id="guest-prompt" style="display: none;">
+            <p>Faça login para salvar suas conversas e criar chamados.</p>
+            <a href="index.html" class="btn-login">Login / Cadastre-se</a>
+        </div>
       </div>
 
       <nav class="sidebar-footer">
         <ul>
-          <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+          <li id="logoutBtn" style="display: none;"><a href="#"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
         </ul>
       </nav>
     </aside>
 
     <main class="main-content">
       <header>
-        <h1>Bem-vindo, <span id="username"></span></h1>
+        <h1 id="welcome-header">Bem-vindo, <span id="username">Convidado</span></h1>
       </header>
       <div class="chat-container">
-        <div class="chat-messages" id="chatMessages">
-          </div>
+        <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input">
           <input type="text" id="userInput" placeholder="Digite sua mensagem...">
           <button id="sendButton" aria-label="Enviar mensagem"><i class="fas fa-paper-plane"></i></button>
