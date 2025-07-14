@@ -16,10 +16,11 @@
       </div>
       <nav>
         <ul>
-          <li><a href="home.html" class="fas fa-house"> Home</a></li>
+          <li><a href="home.html"><i class="fas fa-house"></i> Home</a></li>
           <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
           <li><a href="#" data-section="users"><i class="fas fa-users"></i> Usuários</a></li>
           <li><a href="#" data-section="conversations"><i class="fas fa-comments"></i> Conversas</a></li>
+          <li><a href="#" data-section="tickets"><i class="fas fa-ticket-alt"></i> Chamados</a></li>
           <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
         </ul>
       </nav>
@@ -33,7 +34,6 @@
         </div>
       </header>
 
-      <!-- DASHBOARD -->
       <section id="dashboard-section" class="content-section">
         <div class="stats-container">
           <div class="stat-card">
@@ -45,13 +45,12 @@
             <p id="conversations-count">0</p>
           </div>
           <div class="stat-card">
-            <h3>Mensagens</h3>
-            <p id="messages-count">0</p>
+            <h3>Chamados</h3>
+            <p id="tickets-count">0</p>
           </div>
         </div>
       </section>
 
-      <!-- USUÁRIOS -->
       <section id="users-section" class="content-section" style="display: none;">
         <h2>Gerenciamento de Usuários</h2>
         <div class="table-container">
@@ -61,7 +60,6 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Email</th>
-                <th>Telefone</th>
                 <th>Data de Cadastro</th>
                 <th>Ações</th>
               </tr>
@@ -70,38 +68,55 @@
           </table>
         </div>
       </section>
-
-      <!-- CONVERSAS -->
+      
       <section id="conversations-section" class="content-section" style="display: none;">
-        <h2>Conversas</h2>
-
-        <!-- Lista de conversas -->
+        <h2>Todas as Conversas</h2>
         <div id="conversations-list">
-          <table id="conversations-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Usuário</th>
-                <th>Última Atividade</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="table-container">
+            <table id="conversations-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Usuário</th>
+                  <th>Última Atividade</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
-
-        <!-- Detalhes da conversa -->
         <div id="conversation-details" style="display: none; margin-top: 20px;">
           <h3>Conversa <span id="conversation-id"></span></h3>
-          <div class="chat-container" style="border: 1px solid #ccc; padding: 10px; border-radius: 8px; max-height: 400px; overflow-y: auto;">
+          <div class="chat-container">
             <div class="chat-messages" id="admin-chat-messages"></div>
           </div>
           <button id="back-to-conversations" class="btn" style="margin-top: 10px;">Voltar</button>
         </div>
       </section>
+
+      <section id="tickets-section" class="content-section" style="display: none;">
+        <h2>Todos os Chamados</h2>
+        <div class="table-container">
+          <table id="tickets-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              </tbody>
+          </table>
+        </div>
+      </section>
+
     </main>
   </div>
-
   <script src="js/admin.js"></script>
 </body>
 </html>

@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Rotas
 app.use('/api/auth', authRoutes);
 app.use('/api/chatbot', chatbotRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/admin', adminRoutes); // Esta linha já carrega corretamente o adminRoutes.js atualizado
 
 // Frontend
 app.get('/', (req, res) => {
@@ -32,24 +32,15 @@ app.get('/home', authMiddleware, (req, res) => {
   res.sendFile(path.join(__dirname, '../public/home.html'));
 });
 
+// A rota /chatbot parece redundante se for igual a /home, mas mantida.
 app.get('/chatbot', authMiddleware, (req, res) => {
   res.sendFile(path.join(__dirname, '../public/chatbot.html'));
 });
 
-
-//rota para o painel admin
+// Rota para o painel admin
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/admin.html'));
 });
-
-
-
-
-
-
-
-
-
 
 // Middleware de erro
 app.use((err, req, res, next) => {
