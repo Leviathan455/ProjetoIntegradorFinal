@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h1>Cadastro</h1>
+    <form id="registerForm">
+      
+      <div class="form-group">
+        <label for="username">Nome de usuário</label>
+        <input type="text" id="username" required minlength="3">
+        <small class="error-message" id="usernameError"></small>
+      </div>
+      
+      <div class="form-group">
+        <label for="phone">Telefone</label>
+        <input type="text" id="phone" maxlength="20" placeholder="(99) 99999-9999">
+        <small class="error-message" id="phoneError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+        <small class="error-message" id="emailError"></small>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Senha (mínimo 6 caracteres)</label>
+        <input type="password" id="password" required minlength="6">
+        <small class="error-message" id="passwordError"></small>
+      </div>
+      
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Senha</label>
+        <input type="password" id="confirmPassword" required>
+        <small class="error-message" id="confirmError"></small>
+      </div>
+      
+      <button type="submit" id="registerBtn">Cadastrar</button>
+    
+    </form>
+    <p>Já tem uma conta? <a href="index.html">Faça login</a></p>
+    <div id="successMessage" class="success-message"></div>
+  </div>
+  <script src="js/register.js"></script>
+</body>
+</html>

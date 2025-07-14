@@ -1,0 +1,150 @@
+/* ============================================== */
+/* VARIÁVEIS GLOBAIS (ROOT)                       */
+/* ============================================== */
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #2563eb;
+  --background-color: #f1f5f9;
+  --text-color: #1e293b;
+  --light-gray: #e2e8f0;
+  --dark-gray: #475569;
+  --error-color: #ef4444;
+  --error-background: #fee2e2;
+  --transition-speed: 0.2s ease-in-out;
+}
+
+/* ============================================== */
+/* ESTILOS GERAIS E BODY                          */
+/* ============================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  /* Centraliza o contêiner de autenticação na tela */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* ============================================== */
+/* CONTÊINER DE AUTENTICAÇÃO                      */
+/* ============================================== */
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.07);
+  text-align: center;
+}
+
+.auth-container h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+}
+
+/* ============================================== */
+/* GRUPOS DE FORMULÁRIO E LABELS                  */
+/* ============================================== */
+.form-group {
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--dark-gray);
+}
+
+/* ============================================== */
+/* INPUTS (CAMPOS DE TEXTO)                       */
+/* ============================================== */
+.form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 6px;
+  background-color: var(--background-color);
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* ============================================== */
+/* BOTÕES                                         */
+/* ============================================== */
+button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  margin-top: 0.5rem;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* ============================================== */
+/* LINKS E MENSAGENS DE FEEDBACK                  */
+/* ============================================== */
+.auth-container p {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+.auth-container p a {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+.auth-container p a:hover {
+  text-decoration: underline;
+  color: var(--secondary-color);
+}
+
+.error-message {
+  display: none; /* Oculto por padrão, o JS irá exibi-lo */
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--error-color);
+  background-color: var(--error-background);
+  border: 1px solid var(--error-color);
+  border-radius: 6px;
+  text-align: center;
+}

@@ -1,0 +1,408 @@
+/* ============================================== */
+/* FONTES E VARIÁVEIS GLOBAIS (ROOT)              */
+/* ============================================== */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
+
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #2563eb;
+  --background-color: #f1f5f9;
+  --text-color: #1e293b;
+  --light-gray: #e2e8f0;
+  --dark-gray: #475569;
+
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #f8fafc;
+  --sidebar-active-item: #334155;
+  --sidebar-hover-item: #475569;
+  --accent-color: #38bdf8;
+  --new-chat-button-bg: #10b981;
+  --chat-bg: #f8fafc;
+  --user-message-bg: var(--primary-color);
+  --user-message-text: #ffffff;
+  --bot-message-bg: #ffffff;
+  --border-color: #e2e8f0;
+
+  --transition-speed: 0.2s ease-in-out;
+}
+
+/* ============================================== */
+/* ESTILOS BASE E RESETS                          */
+/* ============================================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  overflow: hidden;
+}
+
+/* Estilização da barra de rolagem (para navegadores WebKit) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #475569; /* Cor que combina com a sidebar */
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5e728a;
+}
+
+/* ============================================== */
+/* LAYOUT PRINCIPAL (DASHBOARD)                   */
+/* ============================================== */
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============================================== */
+/* SIDEBAR                                        */
+/* ============================================== */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.sidebar .logo i {
+  margin-right: 10px;
+}
+
+.sidebar nav {
+  margin-bottom: 20px;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav ul li {
+  margin-bottom: 5px;
+}
+
+.sidebar nav ul li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: var(--sidebar-text);
+  border-radius: 6px;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.sidebar nav ul li a i {
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar nav ul li a:hover {
+  background-color: var(--sidebar-hover-item);
+}
+
+.sidebar nav ul li a.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.sidebar .sidebar-footer {
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid var(--sidebar-hover-item);
+}
+
+/* ============================================== */
+/* SEÇÃO DE HISTÓRICO COM SCROLL (CORREÇÃO)       */
+/* ============================================== */
+.sidebar .history-section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  border-top: 1px solid var(--sidebar-hover-item);
+  padding-top: 20px;
+  overflow: hidden; /* <-- MUDANÇA: Garante que o contêiner não estique */
+}
+
+#chat-history-list {
+  flex-grow: 1; /* Faz a lista ocupar o espaço disponível */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto; /* <-- MUDANÇA: Adiciona o scroll SÓ QUANDO NECESSÁRIO */
+  padding-right: 5px; /* Espaço para a barra de rolagem não colar no texto */
+}
+
+/* ============================================== */
+/* CONTEÚDO PRINCIPAL (ÁREA DO CHAT)              */
+/* ============================================== */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.main-content header {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+}
+
+.main-content header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-color);
+}
+
+/* ============================================== */
+/* CONTÊINER DO CHAT                              */
+/* ============================================== */
+.chat-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bot-message-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: var(--chat-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message {
+  animation: fadeIn 0.3s ease-out;
+  max-width: 75%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+.user-message {
+  background-color: var(--user-message-bg);
+  color: var(--user-message-text);
+  align-self: flex-end;
+  margin-left: auto;
+  border-bottom-right-radius: 5px;
+}
+
+.bot-message {
+  background-color: var(--bot-message-bg);
+  align-self: flex-start;
+  margin-right: auto;
+  border: 1px solid var(--border-color);
+  border-bottom-left-radius: 5px;
+}
+
+/* ============================================== */
+/* INPUT DE TEXTO DO CHAT                         */
+/* ============================================== */
+.chat-input {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  background-color: #ffffff;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-input input[type="text"] {
+  flex-grow: 1;
+  padding: 12px 20px;
+  font-size: 1em;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background-color: var(--chat-bg);
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.chat-input button {
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.1em;
+  color: white;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.chat-input button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.1);
+}
+
+/* ============================================== */
+/* HISTÓRICO, BOTÕES E ACESSIBILIDADE             */
+/* ============================================== */
+#chat-history-list li {
+  padding: 10px;
+  color: #cbd5e1;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  transition: background-color var(--transition-speed);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#chat-history-list li:hover {
+  background-color: var(--sidebar-hover-item);
+  color: var(--sidebar-text);
+}
+
+#chat-history-list li.active-conversation {
+  background-color: var(--sidebar-active-item);
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.new-chat-btn {
+  background-color: var(--new-chat-button-bg);
+  color: white;
+  font-size: 0.9em;
+  margin-top: 15px;
+  width: 100%;
+  text-align: center;
+  border-radius: 5px;
+  padding: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+.new-chat-btn:hover {
+  background-color: #0e9e6e;
+}
+
+/* Foco visível para todos os elementos interativos */
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex="0"]:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+/* ============================================== */
+/* RESPONSIVIDADE PARA MOBILE                     */
+/* ============================================== */
+.menu-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+  }
+
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .main-content {
+    padding: 1rem;
+    height: 100vh;
+  }
+  
+  .chat-container {
+     height: calc(100% - 80px);
+  }
+
+  .main-content header h1 {
+    padding-left: 40px;
+  }
+  
+  .menu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1001;
+      background: var(--sidebar-bg);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.2rem;
+  }
+
+  /* ---- CÓDIGO DE TESTE PARA DIAGNÓSTICO ---- */
+  #chat-history-list {
+      border: 2px solid red !important;       /* Adiciona uma borda para vermos o elemento */
+      height: 200px !important;              /* Força uma altura fixa */
+      overflow-y: scroll !important;         /* Força a barra de rolagem a aparecer SEMPRE */
+  }
+}
